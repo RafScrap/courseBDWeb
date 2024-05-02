@@ -1,0 +1,345 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Хранилище LearnEngModel" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="course">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameCourse" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="textCourse" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="IDCourseLevel" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="courseLevel">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameLevel" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="courseTopic">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IDCourse" Type="int" Nullable="false" />
+          <Property Name="IDTopic" Type="int" Nullable="false" />
+          <Property Name="numTopicInCourse" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="topic">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nameTopic" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="textTopic" Type="varchar" MaxLength="2000" />
+          <Property Name="pictureFile" Type="varchar" MaxLength="1000" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "LearnEng.dbo.courseAndLevel" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="courseAndLevel">
+          <Key>
+            <PropertyRef Name="nameCourse" />
+            <PropertyRef Name="nameLevel" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="nameCourse" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="nameLevel" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="ID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Ошибки, обнаруженные при создании:
+предупреждение 6002: В таблице или представлении "LearnEng.dbo.courseAndTopic" не определен первичный ключ. Ключ был выведен, а определение таблицы или представления было создано в режиме только для чтения.-->
+        <EntityType Name="courseAndTopic">
+          <Key>
+            <PropertyRef Name="nameCourse" />
+            <PropertyRef Name="IDCourse" />
+            <PropertyRef Name="numTopicInCourse" />
+            <PropertyRef Name="nameTopic" />
+          </Key>
+          <Property Name="nameCourse" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="IDCourse" Type="int" Nullable="false" />
+          <Property Name="numTopicInCourse" Type="int" Nullable="false" />
+          <Property Name="nameTopic" Type="varchar" MaxLength="250" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_course_courseLevel">
+          <End Role="courseLevel" Type="Self.courseLevel" Multiplicity="1" />
+          <End Role="course" Type="Self.course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="courseLevel">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="course">
+              <PropertyRef Name="IDCourseLevel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_courseTopic_course">
+          <End Role="course" Type="Self.course" Multiplicity="1" />
+          <End Role="courseTopic" Type="Self.courseTopic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="course">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="courseTopic">
+              <PropertyRef Name="IDCourse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_courseTopic_topic">
+          <End Role="topic" Type="Self.topic" Multiplicity="1" />
+          <End Role="courseTopic" Type="Self.courseTopic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="topic">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="courseTopic">
+              <PropertyRef Name="IDTopic" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище LearnEngModelContainer">
+          <EntitySet Name="course" EntityType="Self.course" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="courseLevel" EntityType="Self.courseLevel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="courseTopic" EntityType="Self.courseTopic" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="topic" EntityType="Self.topic" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="courseAndLevel" EntityType="Self.courseAndLevel" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [courseAndLevel].[nameCourse] AS [nameCourse], 
+    [courseAndLevel].[nameLevel] AS [nameLevel], 
+    [courseAndLevel].[ID] AS [ID]
+    FROM [dbo].[courseAndLevel] AS [courseAndLevel]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="courseAndTopic" EntityType="Self.courseAndTopic" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [courseAndTopic].[nameCourse] AS [nameCourse], 
+    [courseAndTopic].[IDCourse] AS [IDCourse], 
+    [courseAndTopic].[numTopicInCourse] AS [numTopicInCourse], 
+    [courseAndTopic].[nameTopic] AS [nameTopic]
+    FROM [dbo].[courseAndTopic] AS [courseAndTopic]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_course_courseLevel" Association="Self.FK_course_courseLevel">
+            <End Role="courseLevel" EntitySet="courseLevel" />
+            <End Role="course" EntitySet="course" />
+          </AssociationSet>
+          <AssociationSet Name="FK_courseTopic_course" Association="Self.FK_courseTopic_course">
+            <End Role="course" EntitySet="course" />
+            <End Role="courseTopic" EntitySet="courseTopic" />
+          </AssociationSet>
+          <AssociationSet Name="FK_courseTopic_topic" Association="Self.FK_courseTopic_topic">
+            <End Role="topic" EntitySet="topic" />
+            <End Role="courseTopic" EntitySet="courseTopic" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="LearnEngModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="course">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameCourse" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="textCourse" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IDCourseLevel" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="courseLevel" Relationship="Self.FK_course_courseLevel" FromRole="course" ToRole="courseLevel" />
+          <NavigationProperty Name="courseTopic" Relationship="Self.FK_courseTopic_course" FromRole="course" ToRole="courseTopic" />
+        </EntityType>
+        <EntityType Name="courseLevel">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameLevel" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="course" Relationship="Self.FK_course_courseLevel" FromRole="courseLevel" ToRole="course" />
+        </EntityType>
+        <EntityType Name="courseTopic">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IDCourse" Type="Int32" Nullable="false" />
+          <Property Name="IDTopic" Type="Int32" Nullable="false" />
+          <Property Name="numTopicInCourse" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="course" Relationship="Self.FK_courseTopic_course" FromRole="courseTopic" ToRole="course" />
+          <NavigationProperty Name="topic" Relationship="Self.FK_courseTopic_topic" FromRole="courseTopic" ToRole="topic" />
+        </EntityType>
+        <EntityType Name="topic">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nameTopic" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="textTopic" Type="String" MaxLength="2000" FixedLength="false" Unicode="false" />
+          <Property Name="pictureFile" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="courseTopic" Relationship="Self.FK_courseTopic_topic" FromRole="topic" ToRole="courseTopic" />
+        </EntityType>
+        <Association Name="FK_course_courseLevel">
+          <End Role="courseLevel" Type="Self.courseLevel" Multiplicity="1" />
+          <End Role="course" Type="Self.course" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="courseLevel">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="course">
+              <PropertyRef Name="IDCourseLevel" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_courseTopic_course">
+          <End Role="course" Type="Self.course" Multiplicity="1" />
+          <End Role="courseTopic" Type="Self.courseTopic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="course">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="courseTopic">
+              <PropertyRef Name="IDCourse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_courseTopic_topic">
+          <End Role="topic" Type="Self.topic" Multiplicity="1" />
+          <End Role="courseTopic" Type="Self.courseTopic" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="topic">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="courseTopic">
+              <PropertyRef Name="IDTopic" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="LearnEngEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="course" EntityType="Self.course" />
+          <EntitySet Name="courseLevel" EntityType="Self.courseLevel" />
+          <EntitySet Name="courseTopic" EntityType="Self.courseTopic" />
+          <EntitySet Name="topic" EntityType="Self.topic" />
+          <AssociationSet Name="FK_course_courseLevel" Association="Self.FK_course_courseLevel">
+            <End Role="courseLevel" EntitySet="courseLevel" />
+            <End Role="course" EntitySet="course" />
+          </AssociationSet>
+          <AssociationSet Name="FK_courseTopic_course" Association="Self.FK_courseTopic_course">
+            <End Role="course" EntitySet="course" />
+            <End Role="courseTopic" EntitySet="courseTopic" />
+          </AssociationSet>
+          <AssociationSet Name="FK_courseTopic_topic" Association="Self.FK_courseTopic_topic">
+            <End Role="topic" EntitySet="topic" />
+            <End Role="courseTopic" EntitySet="courseTopic" />
+          </AssociationSet>
+          <EntitySet Name="courseAndLevel" EntityType="LearnEngModel.courseAndLevel" />
+          <EntitySet Name="courseAndTopic" EntityType="LearnEngModel.courseAndTopic" />
+        </EntityContainer>
+        <EntityType Name="courseAndLevel">
+          <Key>
+            <PropertyRef Name="nameCourse" />
+            <PropertyRef Name="nameLevel" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="nameCourse" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="nameLevel" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="courseAndTopic">
+          <Key>
+            <PropertyRef Name="nameCourse" />
+            <PropertyRef Name="IDCourse" />
+            <PropertyRef Name="numTopicInCourse" />
+            <PropertyRef Name="nameTopic" />
+          </Key>
+          <Property Name="nameCourse" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IDCourse" Type="Int32" Nullable="false" />
+          <Property Name="numTopicInCourse" Type="Int32" Nullable="false" />
+          <Property Name="nameTopic" Type="String" Nullable="false" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище LearnEngModelContainer" CdmEntityContainer="LearnEngEntities">
+          <EntitySetMapping Name="course">
+            <EntityTypeMapping TypeName="LearnEngModel.course">
+              <MappingFragment StoreEntitySet="course">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="nameCourse" ColumnName="nameCourse" />
+                <ScalarProperty Name="textCourse" ColumnName="textCourse" />
+                <ScalarProperty Name="IDCourseLevel" ColumnName="IDCourseLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="courseLevel">
+            <EntityTypeMapping TypeName="LearnEngModel.courseLevel">
+              <MappingFragment StoreEntitySet="courseLevel">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="nameLevel" ColumnName="nameLevel" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="courseTopic">
+            <EntityTypeMapping TypeName="LearnEngModel.courseTopic">
+              <MappingFragment StoreEntitySet="courseTopic">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="IDCourse" ColumnName="IDCourse" />
+                <ScalarProperty Name="IDTopic" ColumnName="IDTopic" />
+                <ScalarProperty Name="numTopicInCourse" ColumnName="numTopicInCourse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="topic">
+            <EntityTypeMapping TypeName="LearnEngModel.topic">
+              <MappingFragment StoreEntitySet="topic">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="nameTopic" ColumnName="nameTopic" />
+                <ScalarProperty Name="textTopic" ColumnName="textTopic" />
+                <ScalarProperty Name="pictureFile" ColumnName="pictureFile" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="courseAndLevel">
+            <EntityTypeMapping TypeName="LearnEngModel.courseAndLevel">
+              <MappingFragment StoreEntitySet="courseAndLevel">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="nameLevel" ColumnName="nameLevel" />
+                <ScalarProperty Name="nameCourse" ColumnName="nameCourse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="courseAndTopic">
+            <EntityTypeMapping TypeName="LearnEngModel.courseAndTopic">
+              <MappingFragment StoreEntitySet="courseAndTopic">
+                <ScalarProperty Name="nameTopic" ColumnName="nameTopic" />
+                <ScalarProperty Name="numTopicInCourse" ColumnName="numTopicInCourse" />
+                <ScalarProperty Name="IDCourse" ColumnName="IDCourse" />
+                <ScalarProperty Name="nameCourse" ColumnName="nameCourse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

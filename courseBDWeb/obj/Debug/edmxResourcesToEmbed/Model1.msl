@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="Хранилище LearnEngModelContainer" CdmEntityContainer="LearnEngEntities">
+    <EntitySetMapping Name="course">
+      <EntityTypeMapping TypeName="LearnEngModel.course">
+        <MappingFragment StoreEntitySet="course">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="nameCourse" ColumnName="nameCourse" />
+          <ScalarProperty Name="textCourse" ColumnName="textCourse" />
+          <ScalarProperty Name="IDCourseLevel" ColumnName="IDCourseLevel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="courseLevel">
+      <EntityTypeMapping TypeName="LearnEngModel.courseLevel">
+        <MappingFragment StoreEntitySet="courseLevel">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="nameLevel" ColumnName="nameLevel" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="courseTopic">
+      <EntityTypeMapping TypeName="LearnEngModel.courseTopic">
+        <MappingFragment StoreEntitySet="courseTopic">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="IDCourse" ColumnName="IDCourse" />
+          <ScalarProperty Name="IDTopic" ColumnName="IDTopic" />
+          <ScalarProperty Name="numTopicInCourse" ColumnName="numTopicInCourse" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="topic">
+      <EntityTypeMapping TypeName="LearnEngModel.topic">
+        <MappingFragment StoreEntitySet="topic">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="nameTopic" ColumnName="nameTopic" />
+          <ScalarProperty Name="textTopic" ColumnName="textTopic" />
+          <ScalarProperty Name="pictureFile" ColumnName="pictureFile" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="courseAndLevel">
+      <EntityTypeMapping TypeName="LearnEngModel.courseAndLevel">
+        <MappingFragment StoreEntitySet="courseAndLevel">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="nameLevel" ColumnName="nameLevel" />
+          <ScalarProperty Name="nameCourse" ColumnName="nameCourse" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="courseAndTopic">
+      <EntityTypeMapping TypeName="LearnEngModel.courseAndTopic">
+        <MappingFragment StoreEntitySet="courseAndTopic">
+          <ScalarProperty Name="nameTopic" ColumnName="nameTopic" />
+          <ScalarProperty Name="numTopicInCourse" ColumnName="numTopicInCourse" />
+          <ScalarProperty Name="IDCourse" ColumnName="IDCourse" />
+          <ScalarProperty Name="nameCourse" ColumnName="nameCourse" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
